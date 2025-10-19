@@ -13,11 +13,11 @@ public record CalculatorBuilder(CalculatorService calculatorService) {
         System.out.println("덧셈할 문자열을 입력해 주세요");
         String inputLine = readLine();
         if (!inputLine.contains("//")) {
-            System.out.println("결과 : " + calculatorService.splitSperator(inputLine));
+            System.out.println("결과 : " + calculatorService.sumNumbers(inputLine));
         }
 
         if (inputLine.contains("//")) {
-            System.out.println("결과 : " + calculatorService.splitSperator2(inputLine));
+            System.out.println("결과 : " + calculatorService.sumNumbersWithCustomSeparator(inputLine));
         }
  }
 }
