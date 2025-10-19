@@ -1,6 +1,7 @@
 package calculator.builder;
 
 import calculator.service.CalculatorService;
+import static camp.nextstep.edu.missionutils.Console.readLine;
 
 public record CalculatorBuilder(CalculatorService calculatorService) {
 
@@ -10,8 +11,14 @@ public record CalculatorBuilder(CalculatorService calculatorService) {
 
     private void run() {
         System.out.println("덧셈할 문자열을 입력해 주세요");
-//        calculatorService.inputTargetLine();
-        System.out.println("결과 : " + calculatorService.splitSperator());
-    }
+        String inputLine = readLine();
+        if (!inputLine.contains("//")) {
+            System.out.println("결과 : " + calculatorService.splitSperator(inputLine));
+        }
+
+        if (inputLine.contains("//")) {
+            System.out.println("결과 : " + calculatorService.splitSperator2(inputLine));
+        }
+ }
 }
 

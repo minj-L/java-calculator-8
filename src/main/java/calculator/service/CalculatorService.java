@@ -2,6 +2,8 @@ package calculator.service;
 
 import calculator.utils.Patterns;
 
+import java.util.Arrays;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static camp.nextstep.edu.missionutils.Console.readLine;
@@ -9,8 +11,7 @@ import static java.util.Objects.isNull;
 
 public class CalculatorService {
 
-    public String inputLine() {
-        String target = readLine();
+    public String inputLine(String target) {
         if (isNull(target)) {
             throw new IllegalArgumentException("입력된 값이 없습니다.");
         }
@@ -36,16 +37,43 @@ public class CalculatorService {
         return target;
     }
 
-    public int splitSperator() {
-//        String[] parts = targetLine().split("[,;]");
-
-        int numberSum = Pattern.compile("\\d+")
-                .matcher(inputLine())
+    public int splitSperator(String target) {
+        String input = inputLine(target);
+        return Pattern.compile("\\d+")
+                .matcher(input)
                 .results()
                 .mapToInt(mr -> Integer.parseInt(mr.group()))
                 .sum();
-
-        return numberSum;
     }
 
+    public int splitSperator2(String target) {
+        String input = inputLine(target);
+        input = input.replace("\\n", "\n");
+
+        String parts = extractBetween(input, "//", "\n");
+        String numbersPart = input.substring(input.indexOf("\n") + 1);
+
+        String regex = "[" + parts + "]";
+
+        return Pattern.compile(regex)
+                .splitAsStream(numbersPart)
+                .mapToInt(Integer::parseInt)
+                .sum();
+    }
+
+    public String extractBetween(String target, String start, String end) {
+        Pattern pattern = Pattern.compile(start + "(.*?)" + end);
+        Matcher matcher = pattern.matcher(target);
+        if (matcher.find()) {
+            String between = matcher.group(1);
+
+            if (between.isEmpty()) {
+                throw new IllegalArgumentException("구분자가 없습니다.");
+            }
+
+            return between;
+        }
+
+        throw new IllegalArgumentException("A와 B 사이의 패턴을 찾을 수 없습니다.");
+    }
 }
